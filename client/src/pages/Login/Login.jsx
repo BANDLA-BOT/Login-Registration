@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import './Login.css'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify'
@@ -8,10 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const login = () => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [ profile, setProfile] = useState([]);
+  // const [ profile, setProfile] = useState([]);
 
   const loginSubmitHandler =async (e)=>{
       e.preventDefault();
@@ -19,22 +19,23 @@ const login = () => {
         email:email,
         password:password
       }
-      const response = await axios.post('http://localhost:8000/login',loginCredentials)
-      console.log(response.data.success)
-      if(response.data.success){
-        console.log(response.data)
-        LoginSuccessfull()
-        // navigate('/')
-      }
-      else{
+      await axios.post('http://localhost:8000/login',loginCredentials)
+      .then(async (res)=>{
+        // if(res.data.success === true){
+          LoginSuccessfull()
+          await navigate('/dashboard')
+        // }
+        console.log(res)
+      })
+      .catch((err)=>{
+        console.log(err)
         loginFailed()
-      }
-      setEmail('');
-      setPassword('');
+      })
 
-  }
+      }
+  //    
   const LoginSuccessfull = ()=> toast("Logged in successfully")
-  const loginFailed = ()=> toast("Login failed ! Invalid credentials")
+  const loginFailed = ()=> toast("Invalid credentials")
 
 
   return (
@@ -42,7 +43,7 @@ const login = () => {
       <div className="login__card">
       <div className="title">
         <h1>
-        track<span>EX</span>
+       <span>TRACKEXPENSE</span>
         </h1>
       </div>
       <form onSubmit={loginSubmitHandler} className='login__form'>

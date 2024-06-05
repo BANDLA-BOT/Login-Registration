@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import '../Login/Login.css'
 
 const SignIn = () => {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
   
-  const SignUpSubmitHandler =async(e)=>{
+  const SignUpSubmitHandler =(e)=>{
       e.preventDefault();
       const user = {
         username:username,
@@ -17,7 +18,11 @@ const SignIn = () => {
         password:password,
         
       }
-       await axios.post('http://localhost:8000/signup',user);
+       axios.post('http://localhost:8000/signup',user)
+       .then((res)=>{
+         navigate('/login')
+        console.log(res);
+       })
        setEmail('');
        setPassword('')
        setUsername('')
@@ -27,8 +32,11 @@ const SignIn = () => {
       <div className="login__card">
         <div className="title">
           <h1>
-            track<span>EX</span>
+
+          <span>TRACKEXPENSE</span>
           </h1>
+
+          
           {/* <p>A virtual Accountant at your service</p> */}
         </div>
         <form onSubmit={SignUpSubmitHandler} className="login__form">
@@ -59,7 +67,7 @@ const SignIn = () => {
           <button type="submit">Sign Up</button>
           <p>
             Already have an account ?{" "}
-            <Link to="/" className="login__form--signup-btn">
+            <Link to="/login" className="login__form--signup-btn">
               Log in
             </Link>
           </p>

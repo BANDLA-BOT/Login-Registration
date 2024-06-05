@@ -15,7 +15,7 @@ router.post('/', function (req, res, next) {
     password: req.body.password
   });
   res.status(200).json({
-    message: "Save User in DB",
+    message: "Saved User in DB",
     user: user
   });
 });

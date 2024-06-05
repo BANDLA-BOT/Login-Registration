@@ -5,7 +5,20 @@ const User = require('../models/user');
 
 
 router.post('/', async(req,res,next)=>{
-    const { email} = req.body;
+    const { email,password } = req.body;
+    User.findOne({email:email})
+    .then((user)=>{
+      if(user){
+        if(user.password === password){
+           console.log("Password matched and logged in")
+        }else{
+            console.log("Passwords did not match");
+        }
+      }
+      else{
+        console.log("No user exist on this email ID");
+      }
+    })
 
     try {
         const user = await User.findOne({ email });
@@ -19,7 +32,7 @@ router.post('/', async(req,res,next)=>{
         }
       } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({ success: false, message: 'Internal Server error' });
       }
 
 
